@@ -1,7 +1,7 @@
 # fish-functions
 
 <details>
-<summary>fish_ghu</summary>
+<summary>ghu</summary>
 
 this is github util command.
 This command uses [fish-shell](https://github.com/fish-shell/fish-shell) and [ghq](https://github.com/motemen/ghq) and [hub](https://github.com/github/hub).
