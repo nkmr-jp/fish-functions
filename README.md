@@ -11,8 +11,8 @@ please install these in advance.
 ## Install
 
 ```sh
-$ git clone git@github.com:nkmr-jp/fish_ghu.git
-$ cd fish_ghu
+$ git clone git@github.com:nkmr-jp/fish-functions.git
+$ cd fish-functions
 $ ln -s (pwd)/ghu.fish ~/.config/fish/functions/ghu.fish
 ```
 
