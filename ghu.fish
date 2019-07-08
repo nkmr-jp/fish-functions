@@ -44,6 +44,9 @@ function ghu
         set name (basename (pwd))
       end
       open "https://github.com/$GITHUB_USER_NAME/$name"
+    case get
+      ghq get -p $argv[2]
+      cd (ghq root)/github.com/$argv[2]
     case '*'
       echo -e $HELP
   end
