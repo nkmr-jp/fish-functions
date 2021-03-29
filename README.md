@@ -12,7 +12,7 @@ please install these in advance.
 
 ```sh
 $ ghq get -p nkmr-jp/fish-functions
-$ cd ~/ghq/nkmr-jp/fish-functions
+$ cd ~/ghq/github.com/nkmr-jp/fish-functions
 $ ln -s (pwd)/ghu.fish ~/.config/fish/functions/ghu.fish
 ```
 
