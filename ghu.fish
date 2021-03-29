@@ -29,7 +29,7 @@ function ghu
       echo "# $argv[2]" >> README.md
       git add README.md
       git commit -m "first commit"
-      git push -u origin master
+      git push -u origin main
       hub browse
       if test (count $e) -eq 3
         eval ($argv[3] ./)
