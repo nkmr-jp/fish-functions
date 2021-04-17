@@ -18,24 +18,23 @@ function ghu
     case search
       open "https://github.com/search?q=$argv[2]"
     case init
-      if not count $argv > /dev/null
+      if test (count $argv) -ne 2
         echo -e $HELP
         return
       end
       cd (ghq root)/github.com/nkmr-jp
       git init $argv[2]
       cd $argv[2]
-      hub create -p
+      gh repo create $argv[2] --private --confirm
       echo "# $argv[2]" >> README.md
       git add README.md
       git commit -m "first commit"
       git branch -M main
       git push -u origin main
-      hub browse
+      gh repo view --web
       if test (count $e) -eq 3
         eval ($argv[3] ./)
       end
-      # charm ./
     case list
       open "https://github.com/$GITHUB_USER_NAME?tab=repositories&q=$argv[2]"
     case open
