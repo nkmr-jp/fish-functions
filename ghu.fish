@@ -26,6 +26,8 @@ function ghu
       git init $argv[2]
       cd $argv[2]
       gh repo create $argv[2] --private --confirm
+      git remote add origin "git@github.com:nkmr-jp/$argv[2].git"
+      git branch -M main
       echo "# $argv[2]" >> README.md
       git add README.md
       git commit -m "first commit"
