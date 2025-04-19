@@ -7,6 +7,7 @@ Commands:
               usage: ghu init REPOSITORY_NAME [editor]
   list        open github repositories page.
   open        open github repository page. if without [keyword] open current dir repository page.
+  get         clone with a remote repository and change directory
 "
 
 function ghu
