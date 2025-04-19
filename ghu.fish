@@ -52,8 +52,14 @@ function ghu
       cd (ghq root)/github.com/$argv[2]
     case workspace
       cd (ghq root)/github.com/
-      git clone git@github.com:$argv[2].git $argv[2]-ws1
-      cd (ghq root)/github.com/$argv[2]-ws1
+      set ws_base "$argv[2]-ws"
+      set ws_num 1
+      while test -d "$ws_base$ws_num"
+        set ws_num (math $ws_num + 1)
+      end
+      set ws_dir "$ws_base$ws_num"
+      git clone git@github.com:$argv[2].git $ws_dir
+      cd (ghq root)/github.com/$ws_dir
     case '*'
       echo -e $HELP
   end
