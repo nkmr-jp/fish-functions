@@ -4,7 +4,7 @@
 <summary>ghu</summary>
 
 this is github util command.
-This command uses [fish-shell](https://github.com/fish-shell/fish-shell) and [ghq](https://github.com/motemen/ghq) and [hub](https://github.com/github/hub).
+This command uses [fish-shell](https://github.com/fish-shell/fish-shell) and [ghq](https://github.com/motemen/ghq) and [gh](https://cli.github.com/).
 
 please install these in advance.
 
@@ -37,6 +37,7 @@ Commands:
               usage: ghu init REPOSITORY_NAME [editor]
   list        open github repositories page.
   open        open github repository page. if without [keyword] open current dir repository page.
+  get         clone with a remote repository and change directory
 ```
 
 </details>
