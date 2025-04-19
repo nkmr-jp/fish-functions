@@ -50,6 +50,10 @@ function ghu
     case get
       ghq get -p $argv[2]
       cd (ghq root)/github.com/$argv[2]
+    case workspace
+      cd (ghq root)/github.com/
+      git clone git@github.com:$argv[2].git $argv[2]-ws1
+      cd (ghq root)/github.com/$argv[2]-ws1
     case '*'
       echo -e $HELP
   end
