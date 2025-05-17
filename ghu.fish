@@ -8,6 +8,7 @@ Commands:
   list        open github repositories page.
   open        open github repository page. if without [keyword] open current dir repository page.
   get         clone with a remote repository and change directory
+  workspace   create workspace directory
 "
 
 function ghu
