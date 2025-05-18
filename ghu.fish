@@ -9,6 +9,7 @@ Commands:
   open        open github repository page. if without [keyword] open current dir repository page.
   get         clone with a remote repository and change directory
   workspace   create workspace directory
+  wind        create workspace directory and change directory
 "
 
 function ghu
@@ -61,6 +62,17 @@ function ghu
       set ws_dir "$ws_base$ws_num"
       git clone git@github.com:$argv[2].git $ws_dir
       cd (ghq root)/github.com/$ws_dir
+    case wind
+      cd (ghq root)/github.com/
+      set ws_base "$argv[2]-ws"
+      set ws_num 1
+      while test -d "$ws_base$ws_num"
+        set ws_num (math $ws_num + 1)
+      end
+      set ws_dir "$ws_base$ws_num"
+      git clone git@github.com:$argv[2].git $ws_dir
+      cd (ghq root)/github.com/$ws_dir
+      wind .
     case '*'
       echo -e $HELP
   end
