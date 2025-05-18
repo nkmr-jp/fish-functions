@@ -12,9 +12,32 @@ Commands:
   wind        create workspace directory and launch windsurf
 "
 
+# Helper function to display help and return
+function __ghu_show_help
+  echo -e $HELP
+  return 1
+end
+
+# Helper function to create a workspace directory
+function __ghu_create_workspace
+  set -l repo_path $argv[1]
+
+  cd (ghq root)/github.com/
+  set ws_base "$repo_path-ws"
+  set ws_num 1
+  while test -d "$ws_base$ws_num"
+    set ws_num (math $ws_num + 1)
+  end
+  set ws_dir "$ws_base$ws_num"
+  git clone git@github.com:$repo_path.git $ws_dir
+  cd (ghq root)/github.com/$ws_dir
+
+  echo $ws_dir
+end
+
 function ghu
   if not count $argv > /dev/null
-    echo -e $HELP
+    __ghu_show_help
     return
   end
   switch $argv[1]
@@ -22,7 +45,7 @@ function ghu
       open "https://github.com/search?q=$argv[2]"
     case init
       if test (count $argv) -ne 2
-        echo -e $HELP
+        __ghu_show_help
         return
       end
       cd (ghq root)/github.com/nkmr-jp
@@ -34,7 +57,6 @@ function ghu
       echo "# $argv[2]" >> README.md
       git add README.md
       git commit -m "first commit"
-      git branch -M main
       git push -u origin main
       gh repo view --web
       if test (count $e) -eq 3
@@ -53,31 +75,15 @@ function ghu
       ghq get -p $argv[2]
       cd (ghq root)/github.com/$argv[2]
     case workspace
-      cd (ghq root)/github.com/
-      set ws_base "$argv[2]-ws"
-      set ws_num 1
-      while test -d "$ws_base$ws_num"
-        set ws_num (math $ws_num + 1)
-      end
-      set ws_dir "$ws_base$ws_num"
-      git clone git@github.com:$argv[2].git $ws_dir
-      cd (ghq root)/github.com/$ws_dir
+      __ghu_create_workspace $argv[2]
     case wind
-      cd (ghq root)/github.com/
-      set ws_base "$argv[2]-ws"
-      set ws_num 1
-      while test -d "$ws_base$ws_num"
-        set ws_num (math $ws_num + 1)
-      end
-      set ws_dir "$ws_base$ws_num"
-      git clone git@github.com:$argv[2].git $ws_dir
-      cd (ghq root)/github.com/$ws_dir
+      __ghu_create_workspace $argv[2]
       wind .
     case rm
       set prev_dir (pwd)
       cd ../
       rm -rf $prev_dir
     case '*'
-      echo -e $HELP
+      __ghu_show_help
   end
 end
