@@ -10,6 +10,7 @@ Commands:
   get         clone with a remote repository and change directory
   workspace   create workspace directory
   wind        create workspace directory and launch windsurf
+  rm          remove current directory (only works for directories ending with '-ws*')
 "
 
 # Helper function to display help and return
@@ -79,10 +80,22 @@ function ghu
     case wind
       __ghu_create_workspace $argv[2]
       wind .
+    case land
+      __ghu_create_workspace $argv[2]
+      land .
+    case charm
+      __ghu_create_workspace $argv[2]
+      charm .
     case rm
       set prev_dir (pwd)
-      cd ../
-      rm -rf $prev_dir
+      set dir_name (basename $prev_dir)
+      if string match -q "*-ws*" $dir_name
+        cd ../
+        rm -rf $prev_dir
+      else
+        echo "Error: The rm command is only effective for directories ending with '-ws*'."
+        echo "Current directory: $dir_name"
+      end
     case '*'
       __ghu_show_help
   end
