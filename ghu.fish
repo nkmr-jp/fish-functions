@@ -9,7 +9,7 @@ Commands:
   open        open github repository page. if without [keyword] open current dir repository page.
   get         clone with a remote repository and change directory
   workspace   create workspace directory
-  wind        create workspace directory and change directory
+  wind        create workspace directory and launch windsurf
 "
 
 function ghu
@@ -73,6 +73,10 @@ function ghu
       git clone git@github.com:$argv[2].git $ws_dir
       cd (ghq root)/github.com/$ws_dir
       wind .
+    case rm
+      set prev_dir (pwd)
+      cd ../
+      rm -rf $prev_dir
     case '*'
       echo -e $HELP
   end
