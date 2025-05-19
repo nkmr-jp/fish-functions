@@ -11,6 +11,7 @@ Commands:
   workspace   create workspace directory
   wind        create workspace directory and launch windsurf
   rm          remove current directory (only works for directories ending with '-ws*')
+  rmall       remove all directories ending with '-ws*'
 "
 
 # Helper function to display help and return
@@ -96,6 +97,29 @@ function ghu
         echo "Error: The rm command is only effective for directories ending with '-ws*'."
         echo "Current directory: $dir_name"
       end
+    case rmall
+      set current_dir (pwd)
+      cd (ghq root)/github.com/
+      set ws_dirs (find . -maxdepth 2 -type d -name "*-ws*" | sort)
+      if test (count $ws_dirs) -eq 0
+        echo "No workspace directories found."
+      else
+        echo "Found the following workspace directories:"
+        for dir in $ws_dirs
+          echo "  $dir"
+        end
+        read -l -P "Do you want to remove all these directories? [y/N] " confirm
+        if test "$confirm" = "y" -o "$confirm" = "Y"
+          for dir in $ws_dirs
+            echo "Removing $dir..."
+            rm -rf $dir
+          end
+          echo "All workspace directories have been removed."
+        else
+          echo "Operation cancelled."
+        end
+      end
+      cd $current_dir
     case '*'
       __ghu_show_help
   end
