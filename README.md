@@ -4,11 +4,15 @@
 <summary>ghu</summary>
 
 this is github util command.
-This command uses [fish-shell](https://github.com/fish-shell/fish-shell) and [ghq](https://github.com/motemen/ghq) and [gh](https://cli.github.com/).
+This command uses [ghq](https://github.com/motemen/ghq) and [gh](https://cli.github.com/).
 
 please install these in advance.
 
 ## Install
+
+### For Fish Shell
+
+Requires [fish-shell](https://github.com/fish-shell/fish-shell).
 
 ```sh
 $ ghq get -p nkmr-jp/fish-functions
@@ -24,6 +28,31 @@ set -x GITHUB_USER_NAME [your github user name]
 reload config.fish
 ```sh
 $ . ~/.config/fish/config.fish
+```
+
+### For Zsh Shell
+
+```sh
+$ ghq get -p nkmr-jp/fish-functions
+$ cd ~/ghq/github.com/nkmr-jp/fish-functions
+```
+
+add the following to `.zshrc`:
+
+```zsh
+source ~/ghq/github.com/nkmr-jp/fish-functions/ghu.zsh
+```
+
+Add the following to `.zshrc`:
+
+```zsh
+export GITHUB_USER_NAME=[your github user name]
+```
+
+reload zshrc
+
+```sh
+$ source ~/.zshrc
 ```
 
 ## Usage
