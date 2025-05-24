@@ -11,6 +11,7 @@ Commands:
   open        open github repository page. if without [keyword] open current dir repository page.
   get         clone with a remote repository and change directory
   workspace   create workspace directory
+  ws          list all workspace directories
   wind        create workspace directory and launch windsurf
   rm          remove current directory (only works for directories ending with '-ws*')
   rmall       remove all directories ending with '-ws*'
@@ -140,6 +141,20 @@ ghu() {
         echo "Error: The rm command is only effective for directories ending with '-ws*'."
         echo "Current directory: $dir_name"
       fi
+      ;;
+    ws)
+      local current_dir=$(pwd)
+      cd $(ghq root)/github.com/
+      local ws_dirs=($(find . -maxdepth 2 -type d -name "*-ws*" | sort))
+      if [[ ${#ws_dirs[@]} -eq 0 ]]; then
+        echo "No workspace directories found."
+      else
+        echo "Found the following workspace directories:"
+        for dir in "${ws_dirs[@]}"; do
+          echo "  $dir"
+        done
+      fi
+      cd $current_dir
       ;;
     rmall)
       local current_dir=$(pwd)
