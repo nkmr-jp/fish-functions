@@ -36,6 +36,37 @@ __ghu_create_workspace() {
   git clone git@github.com:${repo_path}.git $ws_dir
   cd $(ghq root)/github.com/$ws_dir
 
+  # ブランチ自動生成機能
+  # developブランチがあればそこから、なければmain、さらになければmasterから作成
+  local branch_prefix="feature/"
+  local timestamp=$(date +"%Y%m%d%H%M%S")
+  local new_branch="${branch_prefix}${timestamp}"
+  
+  # 優先順位の高い順にブランチを確認
+  local base_branches=("develop" "main" "master")
+  local base_branch=""
+  
+  for branch in "${base_branches[@]}"; do
+    if git rev-parse --verify $branch >/dev/null 2>&1 || 
+       git rev-parse --verify origin/$branch >/dev/null 2>&1; then
+      base_branch=$branch
+      echo "ベースブランチとして '$branch' を使用します"
+      break
+    fi
+  done
+  
+  if [[ -n "$base_branch" ]]; then
+    # リモートブランチが存在するか確認
+    if git rev-parse --verify origin/$base_branch >/dev/null 2>&1; then
+      git checkout -b $new_branch origin/$base_branch
+    else
+      git checkout -b $new_branch $base_branch
+    fi
+    echo "新しいブランチ '$new_branch' を作成しました"
+  else
+    echo "ブランチの自動生成ができませんでした。develop、main、masterのいずれも見つかりません。"
+  fi
+
   echo $ws_dir
 }
 
