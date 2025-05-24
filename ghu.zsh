@@ -40,7 +40,7 @@ __ghu_create_workspace() {
 
   # ブランチ自動生成機能
   # developブランチがあればそこから、なければmain、さらになければmasterから作成
-  local branch_prefix="feature/"
+  local branch_prefix="ws/"
   local timestamp=$(date +"%Y%m%d%H%M%S")
   local new_branch="${branch_prefix}${timestamp}"
   
