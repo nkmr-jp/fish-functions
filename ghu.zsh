@@ -41,7 +41,7 @@ __ghu_create_workspace() {
   # ブランチ自動生成機能
   # developブランチがあればそこから、なければmain、さらになければmasterから作成
   local branch_prefix="ws/"
-  local timestamp=$(date +"%Y%m%d%H%M%S")
+  local timestamp=$(date +"%Y%m%d_%H%M%S")
   local new_branch="${branch_prefix}${timestamp}"
   
   # 優先順位の高い順にブランチを確認
