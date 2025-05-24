@@ -15,6 +15,7 @@ Commands:
   wind        create workspace directory and launch windsurf
   rm          remove current directory (only works for directories ending with '-ws*')
   rmall       remove all directories ending with '-ws*'
+  rmmrg       remove workspace directories with merged branches
 "
 
 # Helper function to display help and return
@@ -154,6 +155,83 @@ ghu() {
           echo "  $dir"
         done
       fi
+      cd $current_dir
+      ;;
+    rmmrg)
+      local current_dir=$(pwd)
+      cd $(ghq root)/github.com/
+      local ws_dirs=($(find . -maxdepth 2 -type d -name "*-ws*" | sort))
+      if [[ ${#ws_dirs[@]} -eq 0 ]]; then
+        echo "No workspace directories found."
+        cd $current_dir
+        return
+      fi
+      
+      echo "Checking workspace directories for merged branches..."
+      local merged_dirs=()
+      
+      for dir in "${ws_dirs[@]}"; do
+        echo "Checking $dir..."
+        cd "$dir"
+        
+        # リポジトリかどうか確認
+        if [[ ! -d ".git" ]]; then
+          echo "  Not a git repository, skipping."
+          cd $(ghq root)/github.com/
+          continue
+        fi
+        
+        # 現在のブランチを取得
+        local current_branch=$(git rev-parse --abbrev-ref HEAD)
+        if [[ "$current_branch" == "main" || "$current_branch" == "master" || "$current_branch" == "develop" ]]; then
+          echo "  On base branch ($current_branch), skipping."
+          cd $(ghq root)/github.com/
+          continue
+        fi
+        
+        # リモートの最新情報を取得
+        git fetch origin --quiet
+        
+        # マージ済みかどうかを確認
+        local is_merged=false
+        for base in "develop" "main" "master"; do
+          if git rev-parse --verify origin/$base >/dev/null 2>&1; then
+            if git branch --merged origin/$base | grep -q "* $current_branch"; then
+              echo "  Branch '$current_branch' is merged into 'origin/$base'."
+              merged_dirs+=("$dir")
+              is_merged=true
+              break
+            fi
+          fi
+        done
+        
+        if [[ "$is_merged" == "false" ]]; then
+          echo "  Branch '$current_branch' is not merged yet."
+        fi
+        
+        cd $(ghq root)/github.com/
+      done
+      
+      if [[ ${#merged_dirs[@]} -eq 0 ]]; then
+        echo "No workspace directories with merged branches found."
+      else
+        echo "\nFound the following workspace directories with merged branches:"
+        for dir in "${merged_dirs[@]}"; do
+          echo "  $dir"
+        done
+        
+        read "confirm?Do you want to remove these directories? [y/N] "
+        if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+          for dir in "${merged_dirs[@]}"; do
+            echo "Removing $dir..."
+            rm -rf "$dir"
+          done
+          echo "All workspace directories with merged branches have been removed."
+        else
+          echo "Operation cancelled."
+        fi
+      fi
+      
       cd $current_dir
       ;;
     rmall)
